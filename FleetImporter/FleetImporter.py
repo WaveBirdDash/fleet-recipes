@@ -2946,6 +2946,7 @@ class FleetImporter(Processor):
             repo_url: Git repository URL
             github_token: GitHub personal access token
             branch_name: Name of branch to create PR from
+            github_repo_base_branch: Base branch of GitOps repository
             software_title: Software title for PR title
             version: Software version for PR title
 
