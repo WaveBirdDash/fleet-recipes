@@ -82,6 +82,7 @@ FleetImporter recipes support the following variables. Configuration can be set 
 | `AUTO_UPDATE_POLICY_NAME` | Optional | Optional | `autopkg-auto-update-%NAME%` | Policy name template (%NAME% replaced with slugified software title) |
 | **GitOps-Specific Options** | | | | |
 | `s3_retention_versions` | Not used | Optional | `0` | Number of old package versions to retain in S3 (0 = no pruning) |
+| `github_repo_base_branch` | Not used | Optional | `main` | Base branch of GitOps repository used as destination for pull requests. |
 
 ---
 
@@ -242,10 +243,10 @@ Input:
   UNINSTALL_SCRIPT: |
     #!/bin/bash
     echo "Custom uninstall logic"
-  
+
   # Option 2: Use absolute path to custom script
   UNINSTALL_SCRIPT: /path/to/my-custom-uninstall.sh
-  
+
   # Option 3: Default - uses original recipe's script file
   UNINSTALL_SCRIPT: uninstall-myapp.sh
 ```
@@ -346,7 +347,7 @@ All bundle identifiers and versions are automatically escaped to prevent SQL inj
 
 ### Important considerations
 
-1. **Query modes**: 
+1. **Query modes**:
    - **Custom queries** (via `auto_update_policy_query`) give full control and support any osquery table
    - **Automatic mode** extracts CFBundleIdentifier from `.pkg` files and works for standard macOS apps
    - If automatic extraction fails and no custom query is provided, policy creation is skipped with a warning
