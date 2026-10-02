@@ -997,9 +997,7 @@ class FleetImporter(Processor):
         gitops_team_yaml_path = self._gitops_path(
             "gitops_team_yaml_path", "fleets/workstations.yml"
         )
-        github_repo_base_branch = self._gitops_path(
-            "github_repo_base_branch", "main"
-        )
+        github_repo_base_branch = self._gitops_path("github_repo_base_branch", "main")
         github_token = self.env.get("github_token")
         s3_retention_versions = int(self.env.get("s3_retention_versions", 0))
 
@@ -1097,6 +1095,7 @@ class FleetImporter(Processor):
                         gitops_repo_url,
                         github_token,
                         branch_name,
+                        github_repo_base_branch,
                         software_title,
                         version,
                     )
@@ -1298,7 +1297,12 @@ class FleetImporter(Processor):
             # Create pull request
             self.output("Creating pull request...")
             pr_url = self._create_pull_request(
-                gitops_repo_url, github_token, branch_name, software_title, version
+                gitops_repo_url,
+                github_token,
+                branch_name,
+                github_repo_base_branch,
+                software_title,
+                version,
             )
             self.output(f"Pull request created: {pr_url}")
             self.env["pull_request_url"] = pr_url
@@ -2932,6 +2936,7 @@ class FleetImporter(Processor):
         repo_url: str,
         github_token: str,
         branch_name: str,
+        github_repo_base_branch: str,
         software_title: str,
         version: str,
     ) -> str:
