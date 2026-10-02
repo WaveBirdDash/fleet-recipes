@@ -243,10 +243,10 @@ Input:
   UNINSTALL_SCRIPT: |
     #!/bin/bash
     echo "Custom uninstall logic"
-
+  
   # Option 2: Use absolute path to custom script
   UNINSTALL_SCRIPT: /path/to/my-custom-uninstall.sh
-
+  
   # Option 3: Default - uses original recipe's script file
   UNINSTALL_SCRIPT: uninstall-myapp.sh
 ```
@@ -347,7 +347,7 @@ All bundle identifiers and versions are automatically escaped to prevent SQL inj
 
 ### Important considerations
 
-1. **Query modes**:
+1. **Query modes**: 
    - **Custom queries** (via `auto_update_policy_query`) give full control and support any osquery table
    - **Automatic mode** extracts CFBundleIdentifier from `.pkg` files and works for standard macOS apps
    - If automatic extraction fails and no custom query is provided, policy creation is skipped with a warning
