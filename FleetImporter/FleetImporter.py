@@ -997,9 +997,7 @@ class FleetImporter(Processor):
         gitops_team_yaml_path = self._gitops_path(
             "gitops_team_yaml_path", "fleets/workstations.yml"
         )
-        github_repo_base_branch = self._gitops_path(
-            "github_repo_base_branch", "main"
-        )
+        github_repo_base_branch = self._gitops_path("github_repo_base_branch", "main")
         github_token = self.env.get("github_token")
         s3_retention_versions = int(self.env.get("s3_retention_versions", 0))
 
