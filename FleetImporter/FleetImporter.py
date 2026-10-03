@@ -1003,7 +1003,7 @@ class FleetImporter(Processor):
 
         # Validate required GitOps parameters. Parameters with default
         # values are omitted here because they always resolve to a value
-        # (recipe Input or the default applied by _gitops_path).
+        # (recipe Input or the default applied by _gitops_path or env.get).
         if not all(
             [
                 aws_s3_bucket,
