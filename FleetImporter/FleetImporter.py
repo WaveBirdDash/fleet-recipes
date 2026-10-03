@@ -997,7 +997,7 @@ class FleetImporter(Processor):
         gitops_team_yaml_path = self._gitops_path(
             "gitops_team_yaml_path", "fleets/workstations.yml"
         )
-        github_repo_base_branch = self._gitops_path("github_repo_base_branch", "main")
+        github_repo_base_branch = self.env.get("github_repo_base_branch", "main")
         github_token = self.env.get("github_token")
         s3_retention_versions = int(self.env.get("s3_retention_versions", 0))
 
@@ -1065,7 +1065,9 @@ class FleetImporter(Processor):
         temp_dir = None
         extracted_icon_path = None  # Track extracted icon for cleanup
         try:
-            temp_dir = self._clone_gitops_repo(gitops_repo_url, github_token)
+            temp_dir = self._clone_gitops_repo(
+                gitops_repo_url, github_token, github_repo_base_branch
+            )
             self.output(f"Repository cloned to: {temp_dir}")
 
             # Idempotency gate (see #70): if the per-version branch was already
@@ -2364,12 +2366,15 @@ class FleetImporter(Processor):
         ).as_posix()
         return yaml_relative_path, repo_relative_path
 
-    def _clone_gitops_repo(self, repo_url: str, github_token: str) -> str:
+    def _clone_gitops_repo(
+        self, repo_url: str, github_token: str, github_repo_base_branch: str
+    ) -> str:
         """Clone GitOps repository to a temporary directory.
 
         Args:
             repo_url: Git repository URL
             github_token: GitHub personal access token
+            github_repo_base_branch: Base branch of GitOps repository
 
         Returns:
             Path to temporary directory containing cloned repo
@@ -2400,7 +2405,14 @@ class FleetImporter(Processor):
 
             # Clone repository using GIT_ASKPASS for authentication
             subprocess.run(
-                ["git", "clone", repo_url, temp_dir],
+                [
+                    "git",
+                    "clone",
+                    "--branch",
+                    github_repo_base_branch,
+                    repo_url,
+                    temp_dir,
+                ],
                 check=True,
                 capture_output=True,
                 text=True,
